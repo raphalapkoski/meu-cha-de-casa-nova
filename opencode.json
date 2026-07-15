@@ -18,6 +18,15 @@
         "nx-mcp@latest"
       ],
       "enabled": true
+    },
+    "spartan-ui": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@spartan-ng/mcp"
+      ],
+      "enabled": true
     }
   }
 }

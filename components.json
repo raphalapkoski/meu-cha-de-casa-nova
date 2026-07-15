@@ -1,0 +1,5 @@
+{
+  "componentsPath": "frontend/src/app/shared/components/ui",
+  "importAlias": "@components/ui",
+  "style": "nova"
+}

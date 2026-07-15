@@ -1,9 +1,18 @@
+export enum ItemStatus {
+  available = 'available',
+  unavailable = 'unavailable',
+}
+
 export interface IItem {
   id: number;
   name: string;
   description: string;
   image: string;
-  status: 'available' | 'unavailable';
+  status: ItemStatus;
 }
 
-export type CreateItemDto = Pick<IItem, 'name' | 'description' | 'image'>;
+export type CreateItemDto = {
+  name: string;
+  description: string;
+  image: string;
+};

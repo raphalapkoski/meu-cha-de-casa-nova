@@ -10,14 +10,30 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "strict": false,
     "paths": {
-      "@meu-cha-de-casa-nova/shared=types": ["./shared=types/src/index.ts"],
-      "@meu-cha-de-casa-nova/shared-types": ["./shared-types/src/index.ts"]
+      "@meu-cha-de-casa-nova/shared=types": [
+        "./shared=types/src/index.ts"
+      ],
+      "@meu-cha-de-casa-nova/shared-types": [
+        "./shared-types/src/index.ts"
+      ],
+      "@components/ui/button": [
+        "./frontend/src/app/shared/components/ui/button/src/index.ts"
+      ],
+      "@components/ui/utils": [
+        "./frontend/src/app/shared/components/ui/utils/src/index.ts"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

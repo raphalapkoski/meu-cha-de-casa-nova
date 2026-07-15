@@ -43,22 +43,22 @@
 
 ## 6. Frontend — Página Gestão e Modal
 
-- [ ] 6.1 Criar `GestaoPageComponent` standalone (template com botão "Adicionar Item")
-- [ ] 6.2 Criar `ItemModalComponent` standalone com signals: `name`, `description`, `image`, `isSubmitting`
-- [ ] 6.3 Implementar `computed` `isFormValid` (name não vazio e description não vazio e image não vazio)
-- [ ] 6.4 Implementar upload de imagem com `FileReader.readAsDataURL()` → base64
-- [ ] 6.5 Implementar `onSubmit()` que chama `HttpClient.post('/api/items', payload)` e emite sucesso
-- [ ] 6.6 Adicionar rota `/gestao` com `loadComponent` em `app.routes.ts`
+- [x] 6.1 Criar `GestaoPageComponent` standalone (template com botão \"Adicionar Item\")
+- [x] 6.2 Criar `ItemModalComponent` standalone com signals: `name`, `description`, `image`, `isSubmitting`
+- [x] 6.3 Implementar `computed` `isFormValid` (name não vazio e description não vazio e image não vazio)
+- [x] 6.4 Implementar upload de imagem com `FileReader.readAsDataURL()` → base64
+- [x] 6.5 Implementar `onSubmit()` que chama `HttpClient.post('/api/items', payload)` e emite sucesso
+- [x] 6.6 Adicionar rota `/gestao` com `loadComponent` em `app.routes.ts`
 
 ## 7. Frontend — Testes Unitários (Vitest)
 
-- [ ] 7.1 Criar `item-modal.component.spec.ts`: testar estado inicial dos signals (name '', description '', image '', isFormValid false, isSubmitting false)
-- [ ] 7.2 Criar `item-modal.component.spec.ts`: testar que preencher name e description torna isFormValid true
-- [ ] 7.3 Criar `item-modal.component.spec.ts`: testar que submit com dados válidos chama HttpClient
-- [ ] 7.4 Verificar testes do frontend (`npm exec nx test frontend`)
+- [x] 7.1 Criar `item-modal.component.spec.ts`: testar estado inicial dos signals (name '', description '', image '', isFormValid false, isSubmitting false)
+- [x] 7.2 Criar `item-modal.component.spec.ts`: testar que preencher name e description torna isFormValid true
+- [x] 7.3 Criar `item-modal.component.spec.ts`: testar que submit com dados válidos chama HttpClient
+- [x] 7.4 Verificar testes do frontend (`npm exec nx test frontend`)
 
 ## 8. Integração e Verificação Final
 
-- [ ] 8.1 Build de todos os projetos (`npm exec nx run-many --target=build --all`)
-- [ ] 8.2 Rodar lint em projetos afetados (`npm exec nx run-many --target=lint --all`)
-- [ ] 8.3 Rodar todos os testes (`npm exec nx run-many --target=test --all`)
+- [x] 8.1 Build de todos os projetos (`npm exec nx run-many --target=build --all`)
+- [x] 8.2 Rodar lint em projetos afetados (`npm exec nx run-many --target=lint --all`)
+- [x] 8.3 Rodar todos os testes (`npm exec nx run-many --target=test --all`)
