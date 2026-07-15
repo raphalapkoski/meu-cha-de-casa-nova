@@ -2,7 +2,10 @@
   "name": "@meu-cha-de-casa-nova/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "migration:generate": "cd backend && npx ts-node --project tsconfig.app.json ../node_modules/typeorm/cli.js migration:generate -d src/app/database/ormconfig.ts",
+    "migration:run": "cd backend && npx ts-node --project tsconfig.app.json ../node_modules/typeorm/cli.js migration:run -d src/app/database/ormconfig.ts"
+  },
   "private": true,
   "devDependencies": {
     "@angular-devkit/core": "~22.0.4",
@@ -32,6 +35,7 @@
     "@swc/helpers": "~0.5.18",
     "@types/jest": "~30.0.0",
     "@types/node": "^22.0.0",
+    "@types/supertest": "^7.2.1",
     "@typescript-eslint/utils": "^8.58.0",
     "angular-eslint": "^22.0.0",
     "esbuild": "^0.27.0",
@@ -45,6 +49,7 @@
     "jsonc-eslint-parser": "^2.1.0",
     "nx": "23.1.0",
     "prettier": "~3.6.2",
+    "supertest": "^7.2.2",
     "ts-jest": "^29.4.7",
     "ts-node": "10.9.1",
     "tslib": "^2.3.0",
@@ -65,8 +70,13 @@
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/typeorm": "^11.0.3",
     "axios": "^1.6.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
+    "pg": "^8.22.0",
     "reflect-metadata": "^0.2.0",
-    "rxjs": "~7.8.0"
+    "rxjs": "~7.8.0",
+    "typeorm": "^1.1.0"
   }
 }
