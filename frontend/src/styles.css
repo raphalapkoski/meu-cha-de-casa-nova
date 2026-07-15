@@ -28,6 +28,7 @@
     --border: oklch(0.922 0 0);
     --input: oklch(0.922 0 0);
     --ring: oklch(0.708 0 0);   
+    --bg-button: oklch(63.564% 0.12543 229.101);
     --bg-header: oklch(63.564% 0.12543 229.101);
     --color-header: oklch(0.922 0 0);
 }
