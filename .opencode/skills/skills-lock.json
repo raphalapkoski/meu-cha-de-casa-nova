@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "angular-best-practices-spartan": {
+      "source": "alfredoperez/angular-best-practices",
+      "sourceType": "github",
+      "skillPath": "skills/angular-best-practices-spartan/SKILL.md",
+      "computedHash": "5701099f227eb5251284add48d7d4933beccd077297bf349a1069083c7ce8fd8"
+    },
+    "angular-tailwind": {
+      "source": "oguzhan18/angular-ecosystem-skills",
+      "sourceType": "github",
+      "skillPath": "skills/angular-tailwind/SKILL.md",
+      "computedHash": "adc154875472bacbb318caae17819ef0d717cacf878af97167fc7ddcc8e25234"
+    }
+  }
+}
