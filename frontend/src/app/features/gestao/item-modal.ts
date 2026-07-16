@@ -54,6 +54,8 @@ export class ItemModal {
         this.isSubmitting.set(false);
         this.gestaoState.load();
         this.gestaoState.dialogState.set('closed')
+        this.name.set('')
+        this.image.set('')
       },
       error: () => {
         this.isSubmitting.set(false);
