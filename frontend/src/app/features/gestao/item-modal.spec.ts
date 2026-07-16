@@ -1,0 +1,67 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { ItemModal } from './item-modal';
+
+describe('ItemModal', () => {
+  let component: ItemModal;
+  let fixture: ComponentFixture<ItemModal>;
+  let httpMock: HttpTestingController;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ItemModal],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ItemModal);
+    component = fixture.componentInstance;
+    httpMock = TestBed.inject(HttpTestingController);
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    httpMock.verify();
+  });
+
+  it('deve ter estado inicial dos signals', () => {
+    expect(component.name()).toBe('');
+    expect(component.description()).toBe('');
+    expect(component.image()).toBe('');
+    expect(component.isFormValid()).toBe(false);
+    expect(component.isSubmitting()).toBe(false);
+  });
+
+  it('preencher name e description e image torna isFormValid true', () => {
+    component.name.set('Item Teste');
+    component.description.set('Descrição do item');
+    component.image.set('data:image/png;base64,abc123');
+    fixture.detectChanges();
+
+    expect(component.isFormValid()).toBe(true);
+  });
+
+  it('submit com dados válidos chama HttpClient', () => {
+    component.name.set('Item Teste');
+    component.description.set('Descrição do item');
+    component.image.set('data:image/png;base64,abc123');
+    fixture.detectChanges();
+
+    component.onSubmit();
+
+    const req = httpMock.expectOne('/api/items');
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({
+      name: 'Item Teste',
+      description: 'Descrição do item',
+      image: 'data:image/png;base64,abc123',
+    });
+
+    req.flush({ id: 1, name: 'Item Teste', description: 'Descrição do item', image: 'data:image/png;base64,abc123', status: 'available' });
+
+    expect(component.isSubmitting()).toBe(false);
+    expect(component.name()).toBe('');
+    expect(component.description()).toBe('');
+    expect(component.image()).toBe('');
+  });
+});
