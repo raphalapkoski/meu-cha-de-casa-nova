@@ -23,6 +23,7 @@ module.exports = {
       outputHashing: 'none',
       generatePackageJson: true,
       sourceMap: true,
+      runtimeDependencies: ['pg'],
     }),
   ],
 };
