@@ -37,8 +37,8 @@ describe('ItemsController', () => {
   describe('GET /api/items', () => {
     it('1.1 GET com lista cheia retorna 200 e array de itens', async () => {
       const items = [
-        { id: 1, name: 'Item 1', description: 'Desc 1', image: 'img1', status: 'available' },
-        { id: 2, name: 'Item 2', description: 'Desc 2', image: 'img2', status: 'available' },
+        { id: 1, name: 'Item 1', image: 'img1', status: 'available' },
+        { id: 2, name: 'Item 2', image: 'img2', status: 'available' },
       ];
       mockService.findAll.mockResolvedValue(items);
 
@@ -65,7 +65,6 @@ describe('ItemsController', () => {
   describe('POST /api/items', () => {
     const validPayload = {
       name: 'Item Teste',
-      description: 'Descrição do item',
       image: 'data:image/png;base64,iVBORw0KGgo=',
     };
 
@@ -125,21 +124,7 @@ describe('ItemsController', () => {
       expect(mockService.create).not.toHaveBeenCalled();
     });
 
-    it('5.5 POST sem description retorna 400', async () => {
-      const { description, ...payload } = validPayload;
-
-      const res = await request(app.getHttpServer())
-        .post('/api/items')
-        .send(payload)
-        .expect(400);
-
-      expect(res.body.message).toEqual(
-        expect.arrayContaining([expect.stringMatching(/description/i)]),
-      );
-      expect(mockService.create).not.toHaveBeenCalled();
-    });
-
-    it('5.6 POST com status no body retorna 400', async () => {
+    it('5.5 POST com status no body retorna 400', async () => {
       const res = await request(app.getHttpServer())
         .post('/api/items')
         .send({ ...validPayload, status: 'unavailable' })
@@ -151,7 +136,7 @@ describe('ItemsController', () => {
       expect(mockService.create).not.toHaveBeenCalled();
     });
 
-    it('5.7 POST com campo extra retorna 400', async () => {
+    it('5.6 POST com campo extra retorna 400', async () => {
       const res = await request(app.getHttpServer())
         .post('/api/items')
         .send({ ...validPayload, extraField: 'should not be allowed' })

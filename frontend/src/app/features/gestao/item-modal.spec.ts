@@ -29,15 +29,13 @@ describe('ItemModal', () => {
 
   it('deve ter estado inicial dos signals', () => {
     expect(component.name()).toBe('');
-    expect(component.description()).toBe('');
     expect(component.image()).toBe('');
     expect(component.isFormValid()).toBe(false);
     expect(component.isSubmitting()).toBe(false);
   });
 
-  it('preencher name e description e image torna isFormValid true', () => {
+  it('preencher name e image torna isFormValid true', () => {
     component.name.set('Item Teste');
-    component.description.set('Descrição do item');
     component.image.set('data:image/png;base64,abc123');
     fixture.detectChanges();
 
@@ -48,25 +46,22 @@ describe('ItemModal', () => {
     const loadSpy = vi.spyOn(gestaoState, 'load').mockImplementation(() => {});
 
     component.name.set('Item Teste');
-    component.description.set('Descrição do item');
     component.image.set('data:image/png;base64,abc123');
     fixture.detectChanges();
 
-    component.onSubmit();
+    component.onSubmit({ close: () => {} });
 
     const req = httpMock.expectOne('/api/items');
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({
       name: 'Item Teste',
-      description: 'Descrição do item',
       image: 'data:image/png;base64,abc123',
     });
 
-    req.flush({ id: 1, name: 'Item Teste', description: 'Descrição do item', image: 'data:image/png;base64,abc123', status: 'available' });
+    req.flush({ id: 1, name: 'Item Teste', image: 'data:image/png;base64,abc123', status: 'available' });
 
     expect(component.isSubmitting()).toBe(false);
     expect(component.name()).toBe('');
-    expect(component.description()).toBe('');
     expect(component.image()).toBe('');
     expect(loadSpy).toHaveBeenCalled();
   });
