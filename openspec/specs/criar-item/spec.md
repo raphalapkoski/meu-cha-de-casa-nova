@@ -1,4 +1,4 @@
-## Added Requirements
+﻿## Added Requirements
 
 ### Requirement: Cadastrar item
 O sistema SHALL permitir que o anfitrião cadastre um novo item na lista de presentes via `POST /api/items`.
@@ -43,12 +43,12 @@ O campo `id` (int) SHALL ser gerado automaticamente pelo backend.
 - **WHEN** o anfitrião envia POST `/api/items` com campos não definidos no DTO
 - **THEN** o sistema retorna HTTP 400 Bad Request
 
-### Requirement: Exibir página de gestão com modal de criação
-O frontend SHALL exibir uma página `/gestao` com um botão "Adicionar Item" que abre um modal para o cadastro.
+### Requirement: Exibir página de gestão com modal de criação e listagem de itens
+O frontend SHALL exibir uma página /gestao com um botão "Adicionar Item" que abre um modal para o cadastro, e abaixo do botão a listagem dos itens cadastrados.
 
 #### Scenario: Estado inicial da página
-- **WHEN** o anfitrião navega para `/gestao`
-- **THEN** a página exibe o botão "Adicionar Item" e o modal está fechado
+- **WHEN** o anfitrião navega para /gestao
+- **THEN** a página exibe o botão "Adicionar Item", o modal está fechado e a listagem de itens é carregada
 
 #### Scenario: Abrir modal
 - **WHEN** o anfitrião clica em "Adicionar Item"
@@ -64,11 +64,19 @@ O frontend SHALL exibir uma página `/gestao` com um botão "Adicionar Item" que
 
 #### Scenario: Submissão bem-sucedida via modal
 - **WHEN** o anfitrião preenche name, description, seleciona uma imagem e clica em "Salvar"
-- **THEN** o frontend envia POST `/api/items` com os dados + base64 da imagem e exibe mensagem de sucesso
+- **THEN** o frontend envia POST /api/items com os dados + base64 da imagem e exibe mensagem de sucesso
 
 #### Scenario: Upload de imagem
 - **WHEN** o anfitrião seleciona um arquivo de imagem no modal
 - **THEN** o frontend converte o arquivo para base64 via FileReader e armazena no signal `image()`
+
+#### Scenario: Lista cheia na página
+- **WHEN** o anfitrião navega para /gestao e existem itens cadastrados
+- **THEN** a página exibe o data-table com as linhas contendo miniatura e nome de cada item
+
+#### Scenario: Lista vazia na página
+- **WHEN** o anfitrião navega para /gestao e não existem itens cadastrados
+- **THEN** a página exibe a mensagem "Ops, ainda não há nenhum item cadastrado." e o botão "Adicionar Item" permanece visível
 
 ### Requirement: Contrato compartilhado (IItem / CreateItemDto)
 O tipo `IItem` e o tipo `CreateItemDto` SHALL ser definidos em `shared-types/src/lib/item.ts` e exportados no índice do pacote.
@@ -80,3 +88,23 @@ O tipo `IItem` e o tipo `CreateItemDto` SHALL ser definidos em `shared-types/src
 #### Scenario: Frontend usa o contrato
 - **WHEN** o frontend recebe a resposta do backend
 - **THEN** o tipo do objeto é `IItem` conforme `shared-types`
+
+### Requirement: Listar itens via API
+O sistema SHALL expor um endpoint GET /api/items que retorna todos os itens cadastrados.
+
+O retorno SHALL ser um array de objetos no formato IItem conforme definido em shared-types, contendo id, name, image e status.
+
+#### Scenario: Lista cheia
+- **WHEN** o anfitrião acessa GET /api/items e existem itens no banco
+- **THEN** o sistema retorna HTTP 200 com um array de itens JSON
+
+#### Scenario: Lista vazia
+- **WHEN** o anfitrião acessa GET /api/items e não existem itens no banco
+- **THEN** o sistema retorna HTTP 200 com um array vazio []
+
+### Requirement: Carregamento dos itens
+O frontend SHALL buscar os itens via GET /api/items ao carregar a página /gestao.
+
+#### Scenario: Loading state
+- **WHEN** a página /gestao carrega e a requisição GET /api/items está em andamento
+- **THEN** o data-table exibe um indicador de carregamento (skeleton)
