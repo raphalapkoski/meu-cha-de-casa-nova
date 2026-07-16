@@ -2,21 +2,24 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ItemModal } from './item-modal';
+import { GestaoState } from './gestao.state';
 
 describe('ItemModal', () => {
   let component: ItemModal;
   let fixture: ComponentFixture<ItemModal>;
   let httpMock: HttpTestingController;
+  let gestaoState: GestaoState;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ItemModal],
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [provideHttpClient(), provideHttpClientTesting(), GestaoState],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ItemModal);
     component = fixture.componentInstance;
     httpMock = TestBed.inject(HttpTestingController);
+    gestaoState = TestBed.inject(GestaoState);
     fixture.detectChanges();
   });
 
@@ -41,7 +44,9 @@ describe('ItemModal', () => {
     expect(component.isFormValid()).toBe(true);
   });
 
-  it('submit com dados válidos chama HttpClient', () => {
+  it('submit com dados válidos chama HttpClient e recarrega lista', () => {
+    const loadSpy = vi.spyOn(gestaoState, 'load').mockImplementation(() => {});
+
     component.name.set('Item Teste');
     component.description.set('Descrição do item');
     component.image.set('data:image/png;base64,abc123');
@@ -63,5 +68,6 @@ describe('ItemModal', () => {
     expect(component.name()).toBe('');
     expect(component.description()).toBe('');
     expect(component.image()).toBe('');
+    expect(loadSpy).toHaveBeenCalled();
   });
 });

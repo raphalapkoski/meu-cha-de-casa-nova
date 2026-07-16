@@ -29,6 +29,9 @@
       ],
       "@components/ui/utils": [
         "./frontend/src/app/shared/components/ui/utils/src/index.ts"
+      ],
+      "@components/ui/table": [
+        "./frontend/src/app/shared/components/ui/table/src/index.ts"
       ]
     }
   },

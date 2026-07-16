@@ -4,7 +4,8 @@
   </button>
 
   <ng-template [brnDialogContent] let-ctx>
-    <div class="bg-popover text-popover-foreground ring-foreground/10 grid w-full max-w-md gap-4 rounded-xl p-6 ring-1 sm:mx-0">
+    <div
+      class="bg-popover text-popover-foreground ring-foreground/10 grid w-full max-w-md gap-4 rounded-xl p-6 ring-1 sm:mx-0">
       <div class="flex flex-col gap-2">
         <div brnDialogTitle class="text-lg font-semibold">Novo Item</div>
         <p brnDialogDescription class="text-sm text-muted-foreground">
@@ -15,52 +16,36 @@
       <div class="grid gap-4">
         <div class="grid gap-2">
           <label class="text-sm font-medium" for="name">Nome</label>
-          <input
-            id="name"
+          <input id="name"
             class="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-            [(ngModel)]="name"
-            placeholder="Nome do item"
-          />
+            [(ngModel)]="name" placeholder="Nome do item" />
         </div>
 
         <div class="grid gap-2">
           <label class="text-sm font-medium" for="description">Descrição</label>
-          <textarea
-            id="description"
-            class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-            [(ngModel)]="description"
-            placeholder="Descrição do item"
-          ></textarea>
+          <textarea id="description"
+            class="flex min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            [(ngModel)]="description" placeholder="Descrição do item"></textarea>
         </div>
 
         <div class="grid gap-2">
           <label class="text-sm font-medium" for="image">Imagem</label>
-          <input
-            id="image"
-            type="file"
-            accept="image/*"
-            (change)="onImageSelected($event)"
-            class="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground"
-          />
+          <input id="image" type="file" accept="image/*" (change)="onImageSelected($event)"
+            class="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground" />
           @if (image()) {
-            <img [src]="image()" alt="Preview" class="mt-2 h-32 w-32 rounded-md object-cover" />
+          <img [src]="image()" alt="Preview" class="mt-2 h-32 w-32 rounded-md object-cover" />
           }
         </div>
       </div>
 
       <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <button hlmBtn variant="outline" brnDialogClose type="button">Cancelar</button>
-        <button
-          hlmBtn
-          variant="default"
-          [disabled]="!isFormValid() || isSubmitting()"
-          (click)="onSubmit()"
-          type="submit"
-        >
+        <button hlmBtn variant="default" [disabled]="!isFormValid() || isSubmitting()" (click)="onSubmit(ctx)"
+          type="submit">
           @if (isSubmitting()) {
-            <span>Salvando...</span>
+          <span>Salvando...</span>
           } @else {
-            <span>Salvar</span>
+          <span>Salvar</span>
           }
         </button>
       </div>

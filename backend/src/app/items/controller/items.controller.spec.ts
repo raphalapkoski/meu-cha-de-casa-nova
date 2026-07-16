@@ -6,7 +6,7 @@ import { ItemsService } from '../service/items.service';
 
 describe('ItemsController', () => {
   let app: INestApplication;
-  const mockService = { create: jest.fn() };
+  const mockService = { create: jest.fn(), findAll: jest.fn() };
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -32,6 +32,34 @@ describe('ItemsController', () => {
 
   afterAll(async () => {
     await app.close();
+  });
+
+  describe('GET /api/items', () => {
+    it('1.1 GET com lista cheia retorna 200 e array de itens', async () => {
+      const items = [
+        { id: 1, name: 'Item 1', description: 'Desc 1', image: 'img1', status: 'available' },
+        { id: 2, name: 'Item 2', description: 'Desc 2', image: 'img2', status: 'available' },
+      ];
+      mockService.findAll.mockResolvedValue(items);
+
+      const res = await request(app.getHttpServer())
+        .get('/api/items')
+        .expect(200);
+
+      expect(res.body).toEqual(items);
+      expect(mockService.findAll).toHaveBeenCalled();
+    });
+
+    it('1.2 GET com lista vazia retorna 200 e array vazio', async () => {
+      mockService.findAll.mockResolvedValue([]);
+
+      const res = await request(app.getHttpServer())
+        .get('/api/items')
+        .expect(200);
+
+      expect(res.body).toEqual([]);
+      expect(mockService.findAll).toHaveBeenCalled();
+    });
   });
 
   describe('POST /api/items', () => {

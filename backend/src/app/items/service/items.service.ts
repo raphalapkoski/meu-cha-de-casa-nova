@@ -9,4 +9,8 @@ export class ItemsService {
   async create(dto: CreateItemDto) {
     return this.itemsRepository.create({ ...dto, status: 'available' });
   }
+
+  async findAll() {
+    return this.itemsRepository.findAll();
+  }
 }

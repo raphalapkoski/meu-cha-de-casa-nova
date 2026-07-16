@@ -1,0 +1,24 @@
+@if (gestaoState.loading()) {
+  <div class="flex items-center justify-center py-12">
+    <div class="border-muted-foreground h-8 w-8 animate-spin rounded-full border-2 border-t-transparent" role="status">
+      <span class="sr-only">Carregando...</span>
+    </div>
+  </div>
+} @else if (gestaoState.items().length === 0) {
+  <div class="flex flex-col items-center justify-center py-12 text-center">
+    <p class="text-muted-foreground text-sm">Ops, ainda não há nenhum item cadastrado.</p>
+  </div>
+} @else {
+  <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-x-8 gap-y-4">
+    @for (item of gestaoState.items(); track item.id) {
+      <div class="flex flex-col border justify-center items-center rounded-2xl p-8 gap-y-3">
+        <img
+                [src]="item.image"
+                [alt]="item.name"
+                class="h-28 w-28 rounded object-cover"
+              />
+        <span class="font-medium">{{ item.name }}</span>
+      </div>
+    }
+  </div>
+}
