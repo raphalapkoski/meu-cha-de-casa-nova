@@ -9,7 +9,7 @@
   ],
   "functions": {
     "api/index.js": {
-      "includeFiles": "dist/backend/**"
+      "includeFiles": ["dist/backend/**", "node_modules/pg/**", "node_modules/pg-connection-string/**"]
     }
   },
   "git": {
