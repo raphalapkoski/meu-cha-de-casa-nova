@@ -24,8 +24,8 @@ describe('ItemsService', () => {
   describe('findAll', () => {
     it('deve retornar lista de itens quando existem registros', async () => {
       const items = [
-        { id: 1, name: 'Item 1', description: 'Desc 1', image: 'img1', status: 'available' },
-        { id: 2, name: 'Item 2', description: 'Desc 2', image: 'img2', status: 'available' },
+        { id: 1, name: 'Item 1', image: 'img1', status: 'available' },
+        { id: 2, name: 'Item 2', image: 'img2', status: 'available' },
       ];
       mockRepository.findAll.mockResolvedValue(items);
 
@@ -48,7 +48,6 @@ describe('ItemsService', () => {
   describe('create', () => {
     const dto = {
       name: 'Item Teste',
-      description: 'Descrição do item',
       image: 'data:image/png;base64,iVBORw0KGgo=',
     };
 

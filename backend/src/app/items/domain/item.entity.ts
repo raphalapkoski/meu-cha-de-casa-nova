@@ -8,9 +8,6 @@ export class ItemEntity {
   @Column({ length: 255 })
   name: string;
 
-  @Column({ length: 1000 })
-  description: string;
-
   @Column({ type: 'text' })
   image: string;
 

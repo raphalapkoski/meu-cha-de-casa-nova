@@ -6,9 +6,5 @@ export class CreateItemDto {
   name: string;
 
   @IsNotEmpty()
-  @MaxLength(1000)
-  description: string;
-
-  @IsNotEmpty()
   image: string;
 }
