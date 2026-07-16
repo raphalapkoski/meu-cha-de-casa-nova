@@ -14,4 +14,8 @@ export class ItemsRepository {
     const entity = this.repo.create(data);
     return this.repo.save(entity);
   }
+
+  async findAll(): Promise<ItemEntity[]> {
+    return this.repo.find({ order: { id: 'DESC' } });
+  }
 }

@@ -1,12 +1,11 @@
 ﻿## 1. Backend — Listagem de Itens (API)
 
-- [ ] 1.1 Adicionar método indAll() em items.repository.ts usando 	his.repo.find({ order: { id: 'DESC' } })
-- [ ] 1.2 Adicionar método indAll() em items.service.ts que chama o repository
-- [ ] 1.3 Adicionar endpoint @Get() em items.controller.ts que chama itemsService.findAll() e retorna HTTP 200
-- [ ] 1.4 Escrever testes unitários em items.controller.spec.ts para GET /api/items (lista cheia e lista vazia)
-- [ ] 1.5 Escrever testes unitários em items.service.spec.ts para indAll() (lista cheia e lista vazia)
-- [ ] 1.6 Verificar que 
-pm exec nx test backend passa
+- [x] 1.1 Adicionar método findAll() em items.repository.ts usando this.repo.find({ order: { id: 'DESC' } })
+- [x] 1.2 Adicionar método findAll() em items.service.ts que chama o repository
+- [x] 1.3 Adicionar endpoint @Get() em items.controller.ts que chama itemsService.findAll() e retorna HTTP 200
+- [x] 1.4 Escrever testes unitários em items.controller.spec.ts para GET /api/items (lista cheia e lista vazia)
+- [x] 1.5 Escrever testes unitários em items.service.spec.ts para findAll() (lista cheia e lista vazia)
+- [x] 1.6 Verificar que npm exec nx test backend passa
 
 ## 2. Frontend — Instalação do Spartan UI Table
 
