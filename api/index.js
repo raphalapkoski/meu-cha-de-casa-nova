@@ -7,10 +7,12 @@ let cachedApp;
 
 module.exports = async (req, res) => {
   if (!cachedApp) {
-    const app = await bootstrap();
-    await app.init();
-    cachedApp = app;
+    cachedApp = await bootstrap();
+    await cachedApp.init();
   }
-  const expressInstance = cachedApp.getHttpAdapter().getInstance();
-  return expressInstance(req, res);
+  const instance = cachedApp.getHttpAdapter().getInstance();
+  return new Promise((resolve) => {
+    res.on('finish', resolve);
+    instance(req, res);
+  });
 };
