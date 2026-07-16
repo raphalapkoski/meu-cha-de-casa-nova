@@ -1,8 +1,8 @@
-import { Component, inject, signal, computed, viewChild } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { HlmButton } from '@components/ui/button';
-import { BrnDialogImports,  } from '@spartan-ng/brain/dialog';
+import { BrnDialogImports } from '@spartan-ng/brain/dialog';
 import { GestaoState } from './gestao.state';
 
 @Component({
@@ -16,12 +16,11 @@ export class ItemModal {
   private readonly gestaoState = inject(GestaoState);
 
   readonly name = signal('');
-  readonly description = signal('');
   readonly image = signal('');
   readonly isSubmitting = signal(false);
 
   readonly isFormValid = computed(
-    () => this.name().trim().length > 0 && this.description().trim().length > 0 && this.image().length > 0,
+    () => this.name().trim().length > 0 && this.image().length > 0,
   );
 
   onImageSelected(event: Event): void {
@@ -43,13 +42,11 @@ export class ItemModal {
     this.http
       .post('/api/items', {
         name: this.name(),
-        description: this.description(),
         image: this.image(),
       })
       .subscribe({
         next: () => {
           this.name.set('');
-          this.description.set('');
           this.image.set('');
           this.isSubmitting.set(false);
           this.gestaoState.load();

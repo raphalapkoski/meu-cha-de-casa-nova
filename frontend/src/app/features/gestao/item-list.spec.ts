@@ -42,8 +42,8 @@ describe('ItemList', () => {
 
   it('exibe linhas na tabela quando há itens', () => {
     const mockItems: IItem[] = [
-      { id: 1, name: 'Item Um', description: 'Desc 1', image: 'data:image/png;base64,a', status: ItemStatus.available },
-      { id: 2, name: 'Item Dois', description: 'Desc 2', image: 'data:image/png;base64,b', status: ItemStatus.unavailable },
+      { id: 1, name: 'Item Um', image: 'data:image/png;base64,a', status: ItemStatus.available },
+      { id: 2, name: 'Item Dois', image: 'data:image/png;base64,b', status: ItemStatus.unavailable },
     ];
 
     gestaoState.load();
