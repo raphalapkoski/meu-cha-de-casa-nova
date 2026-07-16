@@ -8,6 +8,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       type: 'postgres',
       autoLoadEntities: true,
       synchronize: false,
+      ssl: true,
+      extra: {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      },
     }),
   ],
 })
