@@ -6,7 +6,7 @@ import { ItemsService } from '../service/items.service';
 
 describe('ItemsController', () => {
   let app: INestApplication;
-  const mockService = { create: jest.fn(), findAll: jest.fn(), update: jest.fn() };
+  const mockService = { create: jest.fn(), findAll: jest.fn(), update: jest.fn(), remove: jest.fn() };
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -230,6 +230,26 @@ describe('ItemsController', () => {
         expect.arrayContaining([expect.stringMatching(/extraField/i)]),
       );
       expect(mockService.create).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('DELETE /api/items/:id', () => {
+    it('DELETE com id existente retorna 200', async () => {
+      mockService.remove.mockResolvedValue(undefined);
+
+      const res = await request(app.getHttpServer())
+        .delete('/api/items/1')
+        .expect(200);
+
+      expect(mockService.remove).toHaveBeenCalledWith(1);
+    });
+
+    it('DELETE com id não numérico retorna 400', async () => {
+      const res = await request(app.getHttpServer())
+        .delete('/api/items/abc')
+        .expect(400);
+
+      expect(mockService.remove).not.toHaveBeenCalled();
     });
   });
 });

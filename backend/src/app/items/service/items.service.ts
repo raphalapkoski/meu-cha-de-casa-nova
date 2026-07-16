@@ -22,4 +22,12 @@ export class ItemsService {
     }
     return this.itemsRepository.update(id, { ...dto });
   }
+
+  async remove(id: number) {
+    const item = await this.itemsRepository.findOne(id);
+    if (!item) {
+      throw new NotFoundException(`Item with id ${id} not found`);
+    }
+    return this.itemsRepository.remove(id);
+  }
 }

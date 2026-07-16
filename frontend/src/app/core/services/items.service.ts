@@ -12,6 +12,10 @@ export class ItemsService {
     return this.http.get<IItem[]>('/api/items');
   }
 
+  delete(id: number) {
+    return this.http.delete<void>(`/api/items/${id}`);
+  }
+
   update(id: number, dto: UpdateItemDto) {
     return this.http.put<IItem>(`/api/items/${id}`, dto);
   }

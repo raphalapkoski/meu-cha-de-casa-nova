@@ -27,4 +27,8 @@ export class ItemsRepository {
     await this.repo.update(id, data);
     return this.repo.findOneBy({ id }) as Promise<ItemEntity>;
   }
+
+  async remove(id: number): Promise<void> {
+    await this.repo.delete(id);
+  }
 }

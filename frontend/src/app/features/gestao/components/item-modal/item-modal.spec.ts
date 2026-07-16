@@ -33,7 +33,7 @@ describe('ItemModal', () => {
     expect(component.image()).toBe('');
     expect(component.isFormValid()).toBe(false);
     expect(component.isSubmitting()).toBe(false);
-    expect(component.isEditing()).toBe(false);
+    expect(component.isEditing).toBeFalsy();
   });
 
   it('preencher name e image torna isFormValid true', () => {
@@ -51,7 +51,7 @@ describe('ItemModal', () => {
     component.image.set('data:image/png;base64,abc123');
     fixture.detectChanges();
 
-    component.onSubmit({ close: () => {} });
+    component.onSubmit();
 
     const req = httpMock.expectOne('/api/items');
     expect(req.request.method).toBe('POST');
@@ -70,18 +70,18 @@ describe('ItemModal', () => {
     const loadSpy = vi.spyOn(gestaoState, 'load').mockImplementation(() => {});
 
     const item: IItem = { id: 5, name: 'Original', image: 'data:image/png;base64,old', status: ItemStatus.available };
-    component.openEdit(item);
+    gestaoState.onOpenDialogEdit(item);
     fixture.detectChanges();
 
     expect(component.name()).toBe('Original');
     expect(component.image()).toBe('data:image/png;base64,old');
-    expect(component.isEditing()).toBe(true);
+    expect(component.isEditing).toBeTruthy();
 
     component.name.set('Atualizado');
     component.image.set('data:image/png;base64,new');
     fixture.detectChanges();
 
-    component.onSubmit({ close: () => {} });
+    component.onSubmit();
 
     const req = httpMock.expectOne('/api/items/5');
     expect(req.request.method).toBe('PUT');

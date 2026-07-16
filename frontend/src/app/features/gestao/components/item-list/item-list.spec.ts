@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ItemList } from './item-list';
-import { GestaoState } from './gestao.state';
+import { GestaoState } from '../../gestao.state';
 import { IItem, ItemStatus } from '@meu-cha-de-casa-nova/shared-types';
 
 describe('ItemList', () => {
@@ -64,11 +64,12 @@ describe('ItemList', () => {
     expect(imgs[1].getAttribute('src')).toBe('data:image/png;base64,b');
 
     const buttons = el.querySelectorAll('button');
-    expect(buttons.length).toBe(2);
+    expect(buttons.length).toBe(4);
     expect(buttons[0].textContent).toContain('Editar');
+    expect(buttons[1].textContent).toContain('Excluir');
   });
 
-  it('emite editItem ao clicar no botão editar', () => {
+  it('exibe botão Excluir em cada card', () => {
     const mockItems: IItem[] = [
       { id: 1, name: 'Item Um', image: 'data:image/png;base64,a', status: ItemStatus.available },
     ];
@@ -78,14 +79,37 @@ describe('ItemList', () => {
 
     const req = httpMock.expectOne('/api/items');
     req.flush(mockItems);
+
     fixture.detectChanges();
 
-    const emitSpy = vi.fn();
-    component.editItem.subscribe(emitSpy);
+    const el = fixture.nativeElement as HTMLElement;
+    const deleteButtons = el.querySelectorAll('button');
+    expect(deleteButtons.length).toBe(2);
+    expect(deleteButtons[1].textContent).toContain('Excluir');
+  });
 
-    const button = (fixture.nativeElement as HTMLElement).querySelector('button')!;
-    button.click();
+  it('clique no Excluir chama ItemsService.delete() e recarrega a lista', () => {
+    const mockItems: IItem[] = [
+      { id: 1, name: 'Item Um', image: 'data:image/png;base64,a', status: ItemStatus.available },
+    ];
 
-    expect(emitSpy).toHaveBeenCalledWith(mockItems[0]);
+    gestaoState.load();
+    fixture.detectChanges();
+
+    const getReq = httpMock.expectOne('/api/items');
+    getReq.flush(mockItems);
+
+    fixture.detectChanges();
+
+    const el = fixture.nativeElement as HTMLElement;
+    const deleteButton = el.querySelectorAll('button')[1];
+    deleteButton.click();
+
+    const deleteReq = httpMock.expectOne('/api/items/1');
+    expect(deleteReq.request.method).toBe('DELETE');
+    deleteReq.flush(null);
+
+    const reloadReq = httpMock.expectOne('/api/items');
+    expect(reloadReq.request.method).toBe('GET');
   });
 });

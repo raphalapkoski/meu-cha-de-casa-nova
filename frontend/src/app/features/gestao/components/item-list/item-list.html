@@ -14,10 +14,16 @@
   <div class="flex flex-col border justify-center items-center rounded-2xl p-8 gap-y-3">
     <img [src]="item.image" [alt]="item.name" class="h-28 w-28 rounded object-cover" />
     <span class="font-medium">{{ item.name }}</span>
-    <button (click)="gestaoState.onOpenDialogEdit(item)" hlmBtn variant="outline" size="sm" class="flex items-center gap-1">
-      <svg lucidePencil class="h-4 w-4"></svg>
-      Editar
-    </button>
+    <div class="flex gap-2">
+      <button (click)="gestaoState.onOpenDialogEdit(item)" hlmBtn variant="outline" size="sm" class="flex items-center gap-1">
+        <svg lucidePencil class="h-4 w-4"></svg>
+        Editar
+      </button>
+      <button (click)="gestaoState.onDelete(item)" hlmBtn variant="outline" size="sm" class="flex items-center gap-1">
+        <svg lucideTrash2 class="h-4 w-4"></svg>
+        Excluir
+      </button>
+    </div>
   </div>
   }
 </div>

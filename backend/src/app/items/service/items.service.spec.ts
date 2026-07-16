@@ -5,7 +5,7 @@ import { ItemsRepository } from '../repository/items.repository';
 
 describe('ItemsService', () => {
   let service: ItemsService;
-  const mockRepository = { create: jest.fn(), findAll: jest.fn(), findOne: jest.fn(), update: jest.fn() };
+  const mockRepository = { create: jest.fn(), findAll: jest.fn(), findOne: jest.fn(), update: jest.fn(), remove: jest.fn() };
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -93,6 +93,29 @@ describe('ItemsService', () => {
 
       expect(mockRepository.findOne).toHaveBeenCalledWith(999);
       expect(mockRepository.update).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('remove', () => {
+    it('deve remover um item existente', async () => {
+      const existingItem = { id: 1, name: 'Item', image: 'img', status: 'available' };
+
+      mockRepository.findOne.mockResolvedValue(existingItem);
+      mockRepository.remove.mockResolvedValue(undefined);
+
+      await service.remove(1);
+
+      expect(mockRepository.findOne).toHaveBeenCalledWith(1);
+      expect(mockRepository.remove).toHaveBeenCalledWith(1);
+    });
+
+    it('deve lançar NotFoundException quando item não existe', async () => {
+      mockRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.remove(999)).rejects.toThrow(NotFoundException);
+
+      expect(mockRepository.findOne).toHaveBeenCalledWith(999);
+      expect(mockRepository.remove).not.toHaveBeenCalled();
     });
   });
 });

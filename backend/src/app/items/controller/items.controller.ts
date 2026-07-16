@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Param, Body, HttpCode, HttpStatus, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus, ParseIntPipe } from '@nestjs/common';
 import { ItemsService } from '../service/items.service';
 import { CreateItemDto } from '../domain/create-item.dto';
 import { UpdateItemDto } from '../domain/update-item.dto';
@@ -23,5 +23,11 @@ export class ItemsController {
   @HttpCode(HttpStatus.OK)
   async update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateItemDto) {
     return this.itemsService.update(id, dto);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.OK)
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return this.itemsService.remove(id);
   }
 }

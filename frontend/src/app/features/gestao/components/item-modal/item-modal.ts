@@ -4,13 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { HlmButtonImports } from '@components/ui/button';
 import { HlmDialogImports } from '@components/ui/dialog'
 import { UpdateItemDto } from '@meu-cha-de-casa-nova/shared-types';
-import { GestaoState } from './gestao.state';
+import { GestaoState } from '../../gestao.state';
 
 @Component({
   selector: 'app-item-modal',
   imports: [FormsModule, HlmButtonImports, HlmDialogImports],
   templateUrl: './item-modal.html',
-  styleUrl: './item-modal.css',
 })
 export class ItemModal {
   private readonly http = inject(HttpClient);

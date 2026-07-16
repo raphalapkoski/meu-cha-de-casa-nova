@@ -33,4 +33,11 @@ export class GestaoState {
     this.editingItem.set(item)
     this.dialogState.set('open')
   }
+
+  onDelete(item: IItem): void {
+    this.itemsService.delete(item.id).subscribe({
+      next: () => this.load(),
+      error: () => {},
+    });
+  }
 }
