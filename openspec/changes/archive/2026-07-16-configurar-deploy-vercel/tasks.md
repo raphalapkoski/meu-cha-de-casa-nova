@@ -19,8 +19,8 @@
 
 ## 4. Deploy e Verificação
 
-- [ ] 4.1 Conectar repositório ao Vercel via Git integration
-- [ ] 4.2 Executar primeiro deploy e verificar build bem-sucedido
-- [ ] 4.3 Testar rotas de API (/api/items) no ambiente de produção
-- [ ] 4.4 Testar navegação SPA (rotas do frontend)
-- [ ] 4.5 Verificar conexão com banco de dados PostgreSQL
+- [x] 4.1 Conectar repositório ao Vercel via Git integration
+- [x] 4.2 Executar primeiro deploy e verificar build bem-sucedido
+- [x] 4.3 Testar rotas de API (/api/items) no ambiente de produção
+- [x] 4.4 Testar navegação SPA (rotas do frontend)
+- [x] 4.5 Verificar conexão com banco de dados PostgreSQL
