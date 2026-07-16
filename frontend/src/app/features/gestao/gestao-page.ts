@@ -16,4 +16,5 @@ export class GestaoPage {
   constructor() {
     this.gestaoState.load();
   }
+  
 }
