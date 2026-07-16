@@ -1,22 +1,23 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, linkedSignal, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { HlmButton } from '@components/ui/button';
-import { BrnDialogImports } from '@spartan-ng/brain/dialog';
+import { HlmButtonImports } from '@components/ui/button';
+import { HlmDialogImports } from '@components/ui/dialog'
+import { UpdateItemDto } from '@meu-cha-de-casa-nova/shared-types';
 import { GestaoState } from './gestao.state';
 
 @Component({
   selector: 'app-item-modal',
-  imports: [FormsModule, HlmButton, BrnDialogImports],
+  imports: [FormsModule, HlmButtonImports, HlmDialogImports],
   templateUrl: './item-modal.html',
   styleUrl: './item-modal.css',
 })
 export class ItemModal {
   private readonly http = inject(HttpClient);
-  private readonly gestaoState = inject(GestaoState);
+  protected readonly gestaoState = inject(GestaoState);
 
-  readonly name = signal('');
-  readonly image = signal('');
+  readonly name = linkedSignal(() => this.gestaoState.editingItem()?.name ?? '');
+  readonly image = linkedSignal(() => this.gestaoState.editingItem()?.image ?? '');
   readonly isSubmitting = signal(false);
 
   readonly isFormValid = computed(
@@ -35,26 +36,32 @@ export class ItemModal {
     reader.readAsDataURL(file);
   }
 
-  onSubmit(ctx: any): void {
+  onSubmit(): void {
     if (!this.isFormValid()) return;
 
     this.isSubmitting.set(true);
-    this.http
-      .post('/api/items', {
-        name: this.name(),
-        image: this.image(),
-      })
-      .subscribe({
-        next: () => {
-          this.name.set('');
-          this.image.set('');
-          this.isSubmitting.set(false);
-          this.gestaoState.load();
-          ctx.close()
-        },
-        error: () => {
-          this.isSubmitting.set(false);
-        },
-      });
+    const dto: UpdateItemDto = {
+      name: this.name(),
+      image: this.image(),
+    };
+
+    const request = this.isEditing
+      ? this.http.put(`/api/items/${this.gestaoState.editingItem()!.id}`, dto)
+      : this.http.post('/api/items', dto);
+
+    request.subscribe({
+      next: () => {
+        this.isSubmitting.set(false);
+        this.gestaoState.load();
+        this.gestaoState.dialogState.set('closed')
+      },
+      error: () => {
+        this.isSubmitting.set(false);
+      },
+    });
+  }
+
+  get isEditing(){
+    return this.gestaoState.editingItem()
   }
 }

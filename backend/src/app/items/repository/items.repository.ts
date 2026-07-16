@@ -18,4 +18,13 @@ export class ItemsRepository {
   async findAll(): Promise<ItemEntity[]> {
     return this.repo.find({ order: { id: 'DESC' } });
   }
+
+  async findOne(id: number): Promise<ItemEntity | null> {
+    return this.repo.findOneBy({ id });
+  }
+
+  async update(id: number, data: Partial<ItemEntity>): Promise<ItemEntity> {
+    await this.repo.update(id, data);
+    return this.repo.findOneBy({ id }) as Promise<ItemEntity>;
+  }
 }

@@ -6,7 +6,7 @@ import { ItemsService } from '../service/items.service';
 
 describe('ItemsController', () => {
   let app: INestApplication;
-  const mockService = { create: jest.fn(), findAll: jest.fn() };
+  const mockService = { create: jest.fn(), findAll: jest.fn(), update: jest.fn() };
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -59,6 +59,90 @@ describe('ItemsController', () => {
 
       expect(res.body).toEqual([]);
       expect(mockService.findAll).toHaveBeenCalled();
+    });
+  });
+
+  describe('PUT /api/items/:id', () => {
+    const validPayload = {
+      name: 'Item Atualizado',
+      image: 'data:image/png;base64,iVBORw0KGgo=',
+    };
+
+    const updatedItem = {
+      id: 1,
+      ...validPayload,
+      status: 'available',
+    };
+
+    it('PUT com dados válidos retorna 200', async () => {
+      mockService.update.mockResolvedValue(updatedItem);
+
+      const res = await request(app.getHttpServer())
+        .put('/api/items/1')
+        .send(validPayload)
+        .expect(200);
+
+      expect(res.body).toEqual(updatedItem);
+      expect(mockService.update).toHaveBeenCalledWith(1, validPayload);
+    });
+
+    it('PUT sem name retorna 400', async () => {
+      const { name, ...payload } = validPayload;
+
+      const res = await request(app.getHttpServer())
+        .put('/api/items/1')
+        .send(payload)
+        .expect(400);
+
+      expect(res.body.message).toEqual(
+        expect.arrayContaining([expect.stringMatching(/name/i)]),
+      );
+      expect(mockService.update).not.toHaveBeenCalled();
+    });
+
+    it('PUT com name vazio retorna 400', async () => {
+      const res = await request(app.getHttpServer())
+        .put('/api/items/1')
+        .send({ ...validPayload, name: '' })
+        .expect(400);
+
+      expect(res.body.message).toEqual(
+        expect.arrayContaining([expect.stringMatching(/name/i)]),
+      );
+      expect(mockService.update).not.toHaveBeenCalled();
+    });
+
+    it('PUT com name > 255 chars retorna 400', async () => {
+      const res = await request(app.getHttpServer())
+        .put('/api/items/1')
+        .send({ ...validPayload, name: 'a'.repeat(256) })
+        .expect(400);
+
+      expect(res.body.message).toEqual(
+        expect.arrayContaining([expect.stringMatching(/name/i)]),
+      );
+      expect(mockService.update).not.toHaveBeenCalled();
+    });
+
+    it('PUT com id não numérico retorna 400', async () => {
+      const res = await request(app.getHttpServer())
+        .put('/api/items/abc')
+        .send(validPayload)
+        .expect(400);
+
+      expect(mockService.update).not.toHaveBeenCalled();
+    });
+
+    it('PUT com campo extra retorna 400', async () => {
+      const res = await request(app.getHttpServer())
+        .put('/api/items/1')
+        .send({ ...validPayload, extraField: 'should not be allowed' })
+        .expect(400);
+
+      expect(res.body.message).toEqual(
+        expect.arrayContaining([expect.stringMatching(/extraField/i)]),
+      );
+      expect(mockService.update).not.toHaveBeenCalled();
     });
   });
 

@@ -8,6 +8,8 @@ export class GestaoState {
 
   readonly items = signal<IItem[]>([]);
   readonly loading = signal(true);
+  readonly editingItem = signal<IItem | undefined>(undefined)
+  readonly dialogState = signal<'open' | 'closed'>('closed');
 
   load(): void {
     this.loading.set(true);
@@ -20,5 +22,15 @@ export class GestaoState {
         this.loading.set(false);
       },
     });
+  }
+
+  onOpenDialogCreate() {
+    this.editingItem.set(undefined)
+    this.dialogState.set('open')
+  }
+
+  onOpenDialogEdit(item: IItem) {
+    this.editingItem.set(item)
+    this.dialogState.set('open')
   }
 }

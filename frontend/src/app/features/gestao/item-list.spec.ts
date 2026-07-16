@@ -40,7 +40,7 @@ describe('ItemList', () => {
     expect(el.textContent).toContain('Ops, ainda não há nenhum item cadastrado.');
   });
 
-  it('exibe linhas na tabela quando há itens', () => {
+  it('exibe cards com imagem, nome e botão editar quando há itens', () => {
     const mockItems: IItem[] = [
       { id: 1, name: 'Item Um', image: 'data:image/png;base64,a', status: ItemStatus.available },
       { id: 2, name: 'Item Dois', image: 'data:image/png;base64,b', status: ItemStatus.unavailable },
@@ -62,5 +62,30 @@ describe('ItemList', () => {
     expect(imgs.length).toBe(2);
     expect(imgs[0].getAttribute('src')).toBe('data:image/png;base64,a');
     expect(imgs[1].getAttribute('src')).toBe('data:image/png;base64,b');
+
+    const buttons = el.querySelectorAll('button');
+    expect(buttons.length).toBe(2);
+    expect(buttons[0].textContent).toContain('Editar');
+  });
+
+  it('emite editItem ao clicar no botão editar', () => {
+    const mockItems: IItem[] = [
+      { id: 1, name: 'Item Um', image: 'data:image/png;base64,a', status: ItemStatus.available },
+    ];
+
+    gestaoState.load();
+    fixture.detectChanges();
+
+    const req = httpMock.expectOne('/api/items');
+    req.flush(mockItems);
+    fixture.detectChanges();
+
+    const emitSpy = vi.fn();
+    component.editItem.subscribe(emitSpy);
+
+    const button = (fixture.nativeElement as HTMLElement).querySelector('button')!;
+    button.click();
+
+    expect(emitSpy).toHaveBeenCalledWith(mockItems[0]);
   });
 });

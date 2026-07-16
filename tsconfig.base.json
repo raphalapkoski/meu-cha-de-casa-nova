@@ -32,6 +32,9 @@
       ],
       "@components/ui/table": [
         "./frontend/src/app/shared/components/ui/table/src/index.ts"
+      ],
+      "@components/ui/dialog": [
+        "./frontend/src/app/shared/components/ui/dialog/src/index.ts"
       ]
     }
   },

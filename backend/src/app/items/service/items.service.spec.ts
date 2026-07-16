@@ -1,10 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { NotFoundException } from '@nestjs/common';
 import { ItemsService } from './items.service';
 import { ItemsRepository } from '../repository/items.repository';
 
 describe('ItemsService', () => {
   let service: ItemsService;
-  const mockRepository = { create: jest.fn(), findAll: jest.fn() };
+  const mockRepository = { create: jest.fn(), findAll: jest.fn(), findOne: jest.fn(), update: jest.fn() };
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -62,6 +63,36 @@ describe('ItemsService', () => {
         status: 'available',
       });
       expect(result).toEqual(savedEntity);
+    });
+  });
+
+  describe('update', () => {
+    const dto = {
+      name: 'Item Atualizado',
+      image: 'data:image/png;base64,iVBORw0KGgo=',
+    };
+
+    it('deve atualizar um item existente', async () => {
+      const existingItem = { id: 1, name: 'Antigo', image: 'img', status: 'available' };
+      const updatedItem = { id: 1, ...dto, status: 'available' };
+
+      mockRepository.findOne.mockResolvedValue(existingItem);
+      mockRepository.update.mockResolvedValue(updatedItem);
+
+      const result = await service.update(1, dto);
+
+      expect(mockRepository.findOne).toHaveBeenCalledWith(1);
+      expect(mockRepository.update).toHaveBeenCalledWith(1, { ...dto });
+      expect(result).toEqual(updatedItem);
+    });
+
+    it('deve lançar NotFoundException quando item não existe', async () => {
+      mockRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.update(999, dto)).rejects.toThrow(NotFoundException);
+
+      expect(mockRepository.findOne).toHaveBeenCalledWith(999);
+      expect(mockRepository.update).not.toHaveBeenCalled();
     });
   });
 });

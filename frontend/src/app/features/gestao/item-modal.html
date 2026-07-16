@@ -1,15 +1,12 @@
-<brn-dialog #dialog>
-  <button brnDialogTrigger hlmBtn variant="default">
-    Novo Item
-  </button>
-
-  <ng-template [brnDialogContent] let-ctx>
+<hlm-dialog [state]="gestaoState.dialogState()" (stateChanged)="gestaoState.dialogState.set($event)">
+  <hlm-dialog-content [showCloseButton]="false" *hlmDialogPortal="let ctx"
+    class="flex flex-col justify-center sm:max-w-sm">
     <div
       class="bg-popover text-popover-foreground ring-foreground/10 grid w-full max-w-md gap-4 rounded-xl p-6 ring-1 sm:mx-0">
       <div class="flex flex-col gap-2">
-        <div brnDialogTitle class="text-lg font-semibold">Novo Item</div>
+        <div brnDialogTitle class="text-lg font-semibold">{{ isEditing ? 'Editar Item' : 'Novo Item' }}</div>
         <p brnDialogDescription class="text-sm text-muted-foreground">
-          Preencha os dados do item que deseja adicionar.
+          {{ isEditing ? 'Altere os dados do item.' : 'Preencha os dados do item que deseja adicionar.' }}
         </p>
       </div>
 
@@ -32,16 +29,16 @@
       </div>
 
       <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-        <button hlmBtn variant="outline" brnDialogClose type="button">Cancelar</button>
-        <button hlmBtn variant="default" [disabled]="!isFormValid() || isSubmitting()" (click)="onSubmit(ctx)"
+        <button hlmBtn variant="outline" type="button" (click)="gestaoState.dialogState.set('closed')">Cancelar</button>
+        <button hlmBtn variant="default" [disabled]="!isFormValid() || isSubmitting()" (click)="onSubmit()"
           type="submit">
           @if (isSubmitting()) {
-          <span>Salvando...</span>
+          <span>{{ isEditing ? 'Atualizando...' : 'Salvando...' }}</span>
           } @else {
-          <span>Salvar</span>
+          <span>{{ isEditing ? 'Atualizar' : 'Salvar' }}</span>
           }
         </button>
       </div>
     </div>
-  </ng-template>
-</brn-dialog>
+  </hlm-dialog-content>
+</hlm-dialog>

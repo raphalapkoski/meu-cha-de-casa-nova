@@ -14,3 +14,8 @@ export type CreateItemDto = {
   name: string;
   image: string;
 };
+
+export type UpdateItemDto = {
+  name: string;
+  image: string;
+};
