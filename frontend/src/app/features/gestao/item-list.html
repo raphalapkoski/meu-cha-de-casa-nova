@@ -1,0 +1,36 @@
+@if (gestaoState.loading()) {
+  <div class="flex items-center justify-center py-12">
+    <div class="border-muted-foreground h-8 w-8 animate-spin rounded-full border-2 border-t-transparent" role="status">
+      <span class="sr-only">Carregando...</span>
+    </div>
+  </div>
+} @else if (gestaoState.items().length === 0) {
+  <div class="flex flex-col items-center justify-center py-12 text-center">
+    <p class="text-muted-foreground text-sm">Ops, ainda não há nenhum item cadastrado.</p>
+  </div>
+} @else {
+  <div hlmTableContainer>
+    <table hlmTable>
+      <thead hlmTHead>
+        <tr hlmTr>
+          <th hlmTh class="w-16">Miniatura</th>
+          <th hlmTh>Nome</th>
+        </tr>
+      </thead>
+      <tbody hlmTBody>
+        @for (item of gestaoState.items(); track item.id) {
+          <tr hlmTr>
+            <td hlmTd>
+              <img
+                [src]="item.image"
+                [alt]="item.name"
+                class="h-10 w-10 rounded object-cover"
+              />
+            </td>
+            <td hlmTd class="font-medium">{{ item.name }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

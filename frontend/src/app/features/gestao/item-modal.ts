@@ -1,8 +1,9 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, viewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { HlmButton } from '@components/ui/button';
-import { BrnDialogImports } from '@spartan-ng/brain/dialog';
+import { BrnDialogImports,  } from '@spartan-ng/brain/dialog';
+import { GestaoState } from './gestao.state';
 
 @Component({
   selector: 'app-item-modal',
@@ -12,6 +13,7 @@ import { BrnDialogImports } from '@spartan-ng/brain/dialog';
 })
 export class ItemModal {
   private readonly http = inject(HttpClient);
+  private readonly gestaoState = inject(GestaoState);
 
   readonly name = signal('');
   readonly description = signal('');
@@ -34,7 +36,7 @@ export class ItemModal {
     reader.readAsDataURL(file);
   }
 
-  onSubmit(): void {
+  onSubmit(ctx: any): void {
     if (!this.isFormValid()) return;
 
     this.isSubmitting.set(true);
@@ -50,6 +52,8 @@ export class ItemModal {
           this.description.set('');
           this.image.set('');
           this.isSubmitting.set(false);
+          this.gestaoState.load();
+          ctx.close()
         },
         error: () => {
           this.isSubmitting.set(false);
