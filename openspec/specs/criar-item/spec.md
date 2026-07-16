@@ -5,14 +5,13 @@ O sistema SHALL permitir que o anfitrião cadastre um novo item na lista de pres
 
 O item SHALL conter os seguintes campos:
 - `name` (string, obrigatório, max 255 caracteres)
-- `description` (string, obrigatório, max 1000 caracteres)
 - `image` (string base64, obrigatório)
 - `status` (enum: `'available'` | `'unavailable'`) — NÃO enviado pelo cliente; o backend define como `'available'`
 
 O campo `id` (int) SHALL ser gerado automaticamente pelo backend.
 
 #### Scenario: Cadastro bem-sucedido
-- **WHEN** o anfitrião envia POST `/api/items` com `name`, `description` e `image` (base64) válidos
+- **WHEN** o anfitrião envia POST `/api/items` com `name` e `image` (base64) válidos
 - **THEN** o sistema retorna HTTP 201 com o JSON do item criado (incluindo id gerado e status `'available'`)
 
 #### Scenario: Cadastro sem name
@@ -25,14 +24,6 @@ O campo `id` (int) SHALL ser gerado automaticamente pelo backend.
 
 #### Scenario: Cadastro com name excedendo 255 caracteres
 - **WHEN** o anfitrião envia POST `/api/items` com `name` maior que 255 caracteres
-- **THEN** o sistema retorna HTTP 400 Bad Request
-
-#### Scenario: Cadastro sem description
-- **WHEN** o anfitrião envia POST `/api/items` sem o campo `description`
-- **THEN** o sistema retorna HTTP 400 Bad Request com erro indicando que `description` é obrigatório
-
-#### Scenario: Cadastro com description vazia
-- **WHEN** o anfitrião envia POST `/api/items` com `description` vazia
 - **THEN** o sistema retorna HTTP 400 Bad Request
 
 #### Scenario: Cadastro com status no body
@@ -56,14 +47,14 @@ O frontend SHALL exibir uma página /gestao com um botão "Adicionar Item" que a
 
 #### Scenario: Estado inicial dos signals no modal
 - **WHEN** o modal abre
-- **THEN** `name()` é `''`, `description()` é `''`, `image()` é `''`, `isFormValid()` é `false`, `isSubmitting()` é `false`
+- **THEN** `name()` é `''`, `image()` é `''`, `isFormValid()` é `false`, `isSubmitting()` é `false`
 
-#### Scenario: Preencher name torna formulário válido
-- **WHEN** o anfitrião preenche o campo `name`
+#### Scenario: Preencher name e imagem torna formulário válido
+- **WHEN** o anfitrião preenche o campo `name` e seleciona uma imagem
 - **THEN** `isFormValid()` torna-se `true`
 
 #### Scenario: Submissão bem-sucedida via modal
-- **WHEN** o anfitrião preenche name, description, seleciona uma imagem e clica em "Salvar"
+- **WHEN** o anfitrião preenche name, seleciona uma imagem e clica em "Salvar"
 - **THEN** o frontend envia POST /api/items com os dados + base64 da imagem e exibe mensagem de sucesso
 
 #### Scenario: Upload de imagem
@@ -80,6 +71,9 @@ O frontend SHALL exibir uma página /gestao com um botão "Adicionar Item" que a
 
 ### Requirement: Contrato compartilhado (IItem / CreateItemDto)
 O tipo `IItem` e o tipo `CreateItemDto` SHALL ser definidos em `shared-types/src/lib/item.ts` e exportados no índice do pacote.
+
+`IItem` SHALL conter: `id`, `name`, `image`, `status`.
+`CreateItemDto` SHALL conter: `name`, `image`.
 
 #### Scenario: Backend usa o contrato
 - **WHEN** o backend processa POST `/api/items`
