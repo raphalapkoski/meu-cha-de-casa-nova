@@ -5,6 +5,9 @@ module.exports = {
   output: {
     path: join(__dirname, '../dist/backend'),
     clean: true,
+    library: {
+      type: 'commonjs2',
+    },
     ...(process.env.NODE_ENV !== 'production' && {
       devtoolModuleFilenameTemplate: '[absolute-resource-path]',
     }),
