@@ -2,8 +2,8 @@ import { Component, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HlmButtonImports } from '@components/ui/button';
 import { HlmDialogImports } from '@components/ui/dialog';
-import { ConvidadoState } from '../../convidado.state';
 import confetti from 'canvas-confetti';
+import { ConvidadoState } from '../../../../convidado.state';
 
 @Component({
   selector: 'app-confirmacao-compra',
