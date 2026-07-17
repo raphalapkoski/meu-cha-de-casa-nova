@@ -2,12 +2,12 @@ import { Route } from '@angular/router';
 
 export const appRoutes: Route[] = [
   {
-    path: '',
+    path: 'gestao',
     loadComponent: () => import('../app/core/layout/main/main')
       .then(m => m.Main),
     children: [
       {
-        path: 'gestao',
+        path: '',
         loadComponent: () => import('./features/gestao/gestao-page')
           .then(m => m.GestaoPage),
       },
@@ -18,4 +18,9 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./features/convidado/convidado-page')
       .then(m => m.ConvidadoPage),
   },
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'convidado'
+  }
 ];
