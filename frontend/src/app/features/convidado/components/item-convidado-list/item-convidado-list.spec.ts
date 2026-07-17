@@ -63,9 +63,9 @@ describe('ItemConvidadoList', () => {
     expect(imgs[1].getAttribute('src')).toBe('data:image/png;base64,b');
   });
 
-  it('não exibe botões de ação nos cards', () => {
+  it('exibe botão Oba, comprei este! em cada card', () => {
     const mockItems = [
-      { id: 1, name: 'Item Um', image: 'data:image/png;base64,a' },
+      { id: 1, name: 'Item Um', image: 'data:image/png;base64,a', status: 'available' },
     ];
 
     convidadoState.load();
@@ -78,6 +78,7 @@ describe('ItemConvidadoList', () => {
 
     const el = fixture.nativeElement as HTMLElement;
     const buttons = el.querySelectorAll('button');
-    expect(buttons.length).toBe(0);
+    expect(buttons.length).toBe(1);
+    expect(buttons[0].textContent).toContain('comprei este');
   });
 });

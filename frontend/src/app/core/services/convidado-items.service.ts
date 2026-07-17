@@ -11,4 +11,8 @@ export class ConvidadoItemsService {
   getAll() {
     return this.http.get<IGuestItem[]>('/api/convidado/items');
   }
+
+  marcarCompra(id: number) {
+    return this.http.patch<IGuestItem>(`/api/items/${id}/marcar-compra`, null);
+  }
 }

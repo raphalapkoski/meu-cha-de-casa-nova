@@ -35,6 +35,9 @@
       ],
       "@components/ui/dialog": [
         "./frontend/src/app/shared/components/ui/dialog/src/index.ts"
+      ],
+      "@components/ui/alert": [
+        "./frontend/src/app/shared/components/ui/alert/src/index.ts"
       ]
     }
   },

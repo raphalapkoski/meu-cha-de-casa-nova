@@ -50,4 +50,55 @@ describe('ConvidadoState', () => {
     expect(state.loading()).toBe(false);
     expect(state.items()).toEqual([]);
   });
+
+  describe('marcarCompra', () => {
+    it('deve recarregar lista do backend após sucesso', () => {
+      const mockItems = [
+        { id: 1, name: 'Item 1', image: 'img1', status: 'available' },
+        { id: 2, name: 'Item 2', image: 'img2', status: 'available' },
+      ];
+
+      state.load();
+      const loadReq = httpMock.expectOne('/api/convidado/items');
+      loadReq.flush(mockItems);
+
+      state.marcarCompra(1).subscribe();
+
+      const patchReq = httpMock.expectOne('/api/items/1/marcar-compra');
+      expect(patchReq.request.method).toBe('PATCH');
+      patchReq.flush({ id: 1, name: 'Item 1', image: 'img1', status: 'unavailable' });
+
+      const reloadReq = httpMock.expectOne('/api/convidado/items');
+      const updatedItems = [
+        { id: 1, name: 'Item 1', image: 'img1', status: 'unavailable' },
+        { id: 2, name: 'Item 2', image: 'img2', status: 'available' },
+      ];
+      reloadReq.flush(updatedItems);
+
+      expect(state.items()).toEqual(updatedItems);
+      expect(state.marcando()).toBe(false);
+    });
+
+    it('deve recarregar lista do backend após erro', () => {
+      const mockItems = [
+        { id: 1, name: 'Item 1', image: 'img1', status: 'available' },
+      ];
+
+      state.load();
+      const loadReq = httpMock.expectOne('/api/convidado/items');
+      loadReq.flush(mockItems);
+
+      state.marcarCompra(1).subscribe({
+        error: () => {},
+      });
+
+      const patchReq = httpMock.expectOne('/api/items/1/marcar-compra');
+      patchReq.error(new ProgressEvent('Network error'));
+
+      const reloadReq = httpMock.expectOne('/api/convidado/items');
+      reloadReq.flush(mockItems);
+
+      expect(state.marcando()).toBe(false);
+    });
+  });
 });

@@ -28,6 +28,11 @@ export class ItemsRepository {
     return this.repo.findOneBy({ id }) as Promise<ItemEntity>;
   }
 
+  async updateStatus(id: number, status: string): Promise<ItemEntity> {
+    await this.repo.update(id, { status });
+    return this.repo.findOneBy({ id }) as Promise<ItemEntity>;
+  }
+
   async remove(id: number): Promise<void> {
     await this.repo.delete(id);
   }

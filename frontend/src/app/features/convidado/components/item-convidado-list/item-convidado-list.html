@@ -9,13 +9,50 @@
   <p class="text-muted-foreground text-sm">Nenhum item disponível no momento.</p>
 </div>
 } @else {
+@if (mensagemErro()) {
+  <div class="fixed right-4 top-4 z-50">
+    <hlm-alert class="w-80 bg-red-600/20 h-20">
+      <h4 hlmAlertTitle class="text-red-600 font-bold">Atenção</h4>
+      <p hlmAlertDescription class="text-red-600 font-medium">{{ mensagemErro() }}</p>
+    </hlm-alert>
+  </div>
+}
 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-8 gap-y-4">
   @for (item of convidadoState.items(); track item.id) {
-   <div class="flex flex-col border rounded-2xl px-2 py-4 gap-y-2 justify-end bg-white">
-    <img [src]="item.image" class="aspect-square rounded-sm"/>
-    <span class="font-medium text-center truncate w-full text-black ">{{ item.name }}</span>
-    <button hlmBtn [disabled]="isDisabled(item.status)"> {{ item.status === 'unavaible' ? 'Obá, item comprado' : 'Oba, comprei!!!' }}</button>
+   <div class="flex flex-col border rounded-md shadow px-4 py-4 gap-y-2 justify-end bg-white">
+    <img [src]="item.image" class="aspect-square rounded-sm shadow"/>
+    <span class="font-medium text-center truncate w-full text-[#84939f] ">{{ item.name }}</span>
+    @if (item.status === 'available') {
+      <button hlmBtn (click)="onMarcarCompra(item)">Oba, comprei este!</button>
+    } @else {
+      <button hlmBtn disabled>Obá, item comprado</button>
+    }
   </div>
   }
 </div>
+
+<hlm-dialog [state]="dialogState()" (stateChanged)="dialogState.set($event)">
+  <hlm-dialog-content *hlmDialogPortal
+    class="flex flex-col justify-center sm:max-w-sm">
+    <div class="text-popover-foreground grid w-full max-w-md gap-4 rounded-xl p-2 sm:mx-0">
+      <div class="flex flex-col gap-2 justify-center items-center">
+        <div brnDialogTitle class="text-lg font-semibold">Confirmar compra</div>
+        <p brnDialogDescription class="text-sm text-muted-foreground text-center">
+          Confirmar a compra de "{{ selectedItem()?.name }}"?
+        </p>
+      </div>
+      <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-center">
+        <button hlmBtn variant="outline" (click)="cancelarCompra()" class="w-16">Não</button>
+        <button hlmBtn variant="default" (click)="confirmarCompra()"  class="w-16"
+          [disabled]="convidadoState.marcando()">
+          @if (convidadoState.marcando()) {
+            <span>Marcando...</span>
+          } @else {
+            <span>Sim</span>
+          }
+        </button>
+      </div>
+    </div>
+  </hlm-dialog-content>
+</hlm-dialog>
 }

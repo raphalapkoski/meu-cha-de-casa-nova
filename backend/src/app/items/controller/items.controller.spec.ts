@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication, ValidationPipe, BadRequestException, NotFoundException } from '@nestjs/common';
 import request from 'supertest';
 import { ItemsController } from './items.controller';
 import { ItemsService } from '../service/items.service';
 
 describe('ItemsController', () => {
   let app: INestApplication;
-  const mockService = { create: jest.fn(), findAll: jest.fn(), update: jest.fn(), remove: jest.fn() };
+  const mockService = { create: jest.fn(), findAll: jest.fn(), update: jest.fn(), marcarCompra: jest.fn(), remove: jest.fn() };
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -230,6 +230,49 @@ describe('ItemsController', () => {
         expect.arrayContaining([expect.stringMatching(/extraField/i)]),
       );
       expect(mockService.create).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('PATCH /api/items/:id/marcar-compra', () => {
+    const itemComprado = { id: 1, name: 'Item', image: 'img', status: 'unavailable' };
+
+    it('PATCH marca item como comprado retorna 200', async () => {
+      mockService.marcarCompra.mockResolvedValue(itemComprado);
+
+      const res = await request(app.getHttpServer())
+        .patch('/api/items/1/marcar-compra')
+        .expect(200);
+
+      expect(res.body).toEqual(itemComprado);
+      expect(mockService.marcarCompra).toHaveBeenCalledWith(1);
+    });
+
+    it('PATCH com id não numérico retorna 400', async () => {
+      const res = await request(app.getHttpServer())
+        .patch('/api/items/abc/marcar-compra')
+        .expect(400);
+
+      expect(mockService.marcarCompra).not.toHaveBeenCalled();
+    });
+
+    it('PATCH com item inexistente retorna 404', async () => {
+      mockService.marcarCompra.mockRejectedValue(new NotFoundException('Item with id 999 not found'));
+
+      const res = await request(app.getHttpServer())
+        .patch('/api/items/999/marcar-compra')
+        .expect(404);
+
+      expect(mockService.marcarCompra).toHaveBeenCalledWith(999);
+    });
+
+    it('PATCH com item já comprado retorna 400', async () => {
+      mockService.marcarCompra.mockRejectedValue(new BadRequestException('Item with id 1 is already marked as purchased'));
+
+      const res = await request(app.getHttpServer())
+        .patch('/api/items/1/marcar-compra')
+        .expect(400);
+
+      expect(mockService.marcarCompra).toHaveBeenCalledWith(1);
     });
   });
 
