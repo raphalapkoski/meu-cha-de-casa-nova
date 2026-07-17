@@ -1,0 +1,24 @@
+<hlm-dialog [state]="convidadoState.dialogState()" (stateChanged)="convidadoState.dialogState.set($event)">
+  <hlm-dialog-content *hlmDialogPortal
+    class="flex flex-col justify-center sm:max-w-sm">
+    <div class="text-popover-foreground grid w-full max-w-md gap-4 rounded-xl p-2 sm:mx-0">
+      <div class="flex flex-col gap-2 justify-center items-center">
+        <div brnDialogTitle class="text-lg font-semibold">Confirmar compra</div>
+        <p brnDialogDescription class="text-sm text-muted-foreground text-center">
+          Confirmar a compra de "{{ convidadoState.selectedItem()?.name }}"?
+        </p>
+      </div>
+      <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-center">
+        <button hlmBtn variant="outline" (click)="cancelarCompra()" class="w-16">Não</button>
+        <button hlmBtn variant="default" (click)="confirmarCompra()"  class="w-16"
+          [disabled]="convidadoState.marcando()">
+          @if (convidadoState.marcando()) {
+            <span>Marcando...</span>
+          } @else {
+            <span>Sim</span>
+          }
+        </button>
+      </div>
+    </div>
+  </hlm-dialog-content>
+</hlm-dialog>

@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { finalize } from 'rxjs';
+import { EMPTY, Observable, finalize } from 'rxjs';
 import { IGuestItem } from '@meu-cha-de-casa-nova/shared-types';
 import { ConvidadoItemsService } from '../../core/services/convidado-items.service';
 
@@ -10,6 +10,9 @@ export class ConvidadoState {
   readonly items = signal<IGuestItem[]>([]);
   readonly loading = signal(true);
   readonly marcando = signal(false);
+  readonly selectedItem = signal<IGuestItem | null>(null);
+  readonly dialogState = signal<'open' | 'closed'>('closed');
+  readonly mensagemErro = signal<string | null>(null);
 
   load(): void {
     this.loading.set(true);
@@ -34,5 +37,26 @@ export class ConvidadoState {
         this.marcando.set(false);
       }),
     );
+  }
+
+  abrirDialog(item: IGuestItem): void {
+    this.selectedItem.set(item);
+    this.dialogState.set('open');
+  }
+
+  fecharDialog(): void {
+    this.dialogState.set('closed');
+    this.selectedItem.set(null);
+  }
+
+  confirmarCompra(): Observable<IGuestItem> {
+    const item = this.selectedItem();
+    if (!item) return EMPTY;
+    this.fecharDialog();
+    return this.marcarCompra(item.id);
+  }
+
+  limparMensagem(): void {
+    this.mensagemErro.set(null);
   }
 }
