@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ItemModal } from './item-modal';
-import { GestaoState } from './gestao.state';
+import { GestaoState } from '../../gestao.state';
 import { IItem, ItemStatus } from '@meu-cha-de-casa-nova/shared-types';
 
 describe('ItemModal', () => {
